@@ -8,6 +8,7 @@ public class Ciclo {
     private Integer id;
     private Integer duracion;
     private String nombre_ciclo;
+    private String lo;
 
     public Integer getId() {
         return id;
