@@ -10,6 +10,7 @@ public class Ciclo {
     private String nombre_ciclo;
     private String lo;
 
+    //jgytddukfd
     public Integer getId() {
         return id;
     }
