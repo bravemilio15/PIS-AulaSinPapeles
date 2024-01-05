@@ -7,7 +7,7 @@ public class Docente extends Usuario {
     private String especialidad;
     private String grado_academico;
     private String experiencia_educativa;
-    private ListaEnlazada<Materia> materias;
+    private ListaEnlazada<Materia> materias = new ListaEnlazada<>();
 
     public ListaEnlazada<Materia> getMaterias() {
         return materias;
@@ -15,6 +15,22 @@ public class Docente extends Usuario {
 
     public void setMaterias(ListaEnlazada<Materia> materias) {
         this.materias = materias;
+    }
+
+    public Ciclo getCiclo() {
+        return ciclo;
+    }
+
+    public void setCiclo(Ciclo ciclo) {
+        this.ciclo = ciclo;
+    }
+
+    public Paralelo getParalelo() {
+        return paralelo;
+    }
+
+    public void setParalelo(Paralelo paralelo) {
+        this.paralelo = paralelo;
     }
 
     public String getEspecialidad() {

@@ -11,6 +11,17 @@ public class Materia {
     private String Categoria; // Es para ver si es Itinerario Materia Basica y asi para no crear MateriaI
     private Ciclo ciclo;
 
+    public Materia() {
+    }
+
+    public Materia(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
     public Ciclo getCiclo() {
         return ciclo;
     }
@@ -33,10 +44,6 @@ public class Materia {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
     }
 
     public void setNombre(String nombre) {

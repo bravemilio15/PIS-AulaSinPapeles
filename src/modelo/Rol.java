@@ -9,16 +9,17 @@ package modelo;
  * @author cristian
  */
 public class Rol {
-    private Integer rol;
+
+    private Integer id;
     private String nombre_rol;
     private String descripccion;
 
-    public Integer getRol() {
-        return rol;
+    public Integer getId() {
+        return id;
     }
 
-    public void setRol(Integer rol) {
-        this.rol = rol;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNombre_rol() {
@@ -36,6 +37,5 @@ public class Rol {
     public void setDescripccion(String descripccion) {
         this.descripccion = descripccion;
     }
-    
-    
+
 }

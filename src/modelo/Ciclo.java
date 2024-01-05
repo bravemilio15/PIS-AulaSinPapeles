@@ -8,9 +8,7 @@ public class Ciclo {
     private Integer id;
     private Integer duracion;
     private String nombre_ciclo;
-    private String lo;
 
-    //jgytddukfd
     public Integer getId() {
         return id;
     }
@@ -37,7 +35,7 @@ public class Ciclo {
 
     @Override
     public String toString() {
-        return "Nombre:" + nombre_ciclo;
+        return nombre_ciclo;
     }
 
 }

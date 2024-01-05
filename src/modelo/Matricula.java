@@ -11,6 +11,11 @@ public class Matricula {
     private String estado;
     private ListaEnlazada<Materia> materias;
 
+    public Matricula() {
+
+        this.materias = new ListaEnlazada<>();
+    }
+
     public ListaEnlazada<Materia> getMaterias() {
         return materias;
     }
@@ -19,9 +24,6 @@ public class Matricula {
         this.materias = materias;
     }
 
-    
-    
-
     public Integer getId_estudiante() {
         return id_estudiante;
     }
@@ -29,8 +31,6 @@ public class Matricula {
     public void setId_estudiante(Integer id_estudiante) {
         this.id_estudiante = id_estudiante;
     }
-
-
 
     public Integer getId() {
         return id;
@@ -62,6 +62,10 @@ public class Matricula {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public void addMateria(String materia) {
+        this.materias.insertar(new Materia(materia));
     }
 
 }
