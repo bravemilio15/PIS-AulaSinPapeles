@@ -5,6 +5,14 @@
  */
 package vista.Tutorias;
 
+import vista.Administracion.*;
+import controlador.ControlarDocente;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import javax.swing.JOptionPane;
+import modelo.Docente;
+import modelo.tabla.ModeloTablaDocente;
+import vista.utilidades.Utilidades;
 
 /**
  *
@@ -12,7 +20,9 @@ package vista.Tutorias;
  */
 public class pnlDocente extends javax.swing.JPanel {
 
-
+    private ModeloTablaDocente modelo = new ModeloTablaDocente();
+    private ControlarDocente control = new ControlarDocente();
+    private int pos = -1;
 
     /**
      * Creates new form pnlHome
@@ -79,7 +89,18 @@ public class pnlDocente extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+        if(java.awt.Desktop.isDesktopSupported()){
+            java.awt.Desktop desktop=java.awt.Desktop.getDesktop();
 
+            if(desktop.isSupported(java.awt.Desktop.Action.BROWSE)){
+                try{
+                    java.net.URI uri=new java.net.URI("https://us04web.zoom.us/j/73780831526?pwd=7fwx2RZG3FdxOOTmapolsa8WzEqhXm.1");
+                    desktop.browse(uri);
+                }catch(URISyntaxException | IOException ex) {
+
+                }
+            }
+        }
     }//GEN-LAST:event_jLabel1MouseClicked
 
 
