@@ -13,10 +13,6 @@ import java.util.logging.Logger;
 import modelo.tabla.ModeloTablaEstudiante;
 import vista.utilidades.Utilidades;
 
-/**
- *
- * @author cristian
- */
 public class pnlAreaPersonal extends javax.swing.JPanel {
 
     private ModeloTablaEstudiante modelo = new ModeloTablaEstudiante();
