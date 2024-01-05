@@ -5,19 +5,145 @@
  */
 package vista.Administracion;
 
+import controlador.ControlMateria;
+import controlador.ControlarMatricula;
+import controlador.dao.CicloDAO;
+import controlador.dao.RolDao;
+import controlador.ed.lista.exception.EmptyException;
+import controlador.ed.lista.exception.PositionException;
+import controlador.ed.lista.exception.VacioException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import modelo.Ciclo;
+import modelo.tabla.ModeloTablaCiclo;
+import modelo.tabla.ModeloTablaMateria;
+import modelo.tabla.ModeloTablaRoles;
+import vista.utilidades.Utilidades;
+
 /**
  *
  * @author cristian
  */
 public class pnlConfiguracion extends javax.swing.JPanel {
 
-    
+    CicloDAO cd = new CicloDAO();
+    ControlMateria cm = new ControlMateria();
+    RolDao rd = new RolDao();
+    ModeloTablaRoles modeloR = new ModeloTablaRoles();
+    ModeloTablaCiclo modeloC = new ModeloTablaCiclo();
+    ModeloTablaMateria modeloM = new ModeloTablaMateria();
+
     public pnlConfiguracion() {
         initComponents();
+        Limpiar();
+    }
+
+    public void CargarCiclos() {
+        modeloC.setDatos(cd.listar());
+        tblCiclo.setModel(modeloC);
+        tblCiclo.updateUI();
+    }
+
+    public void CargarMaterias() {
+        modeloM.setDatos(cm.getMateriaDao().listar());
+        tblMaterias.setModel(modeloM);
+        tblMaterias.updateUI();
+    }
+
+    public void CargarRoles() {
+        modeloR.setDatos(rd.listar());
+        tblRoles.setModel(modeloR);
+        tblRoles.updateUI();
+    }
+
+    public void cargarCombos() {
+        try {
+            Utilidades.cargarCiclosDisponibles(cbxCiclos);
+            cbxCiclos.updateUI();
+        } catch (VacioException ex) {
+            Logger.getLogger(pnlConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EmptyException ex) {
+            Logger.getLogger(pnlConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PositionException ex) {
+            Logger.getLogger(pnlConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        Utilidades.cargarCategoria(cbxCategoria);
+        Utilidades.cargarRoles(cbxRoles);
 
     }
 
-    
+    public void Limpiar() {
+        txtNombreCiclo.setText("");
+        txtDuracionCiclo.setText("");
+        txtNombreMaterias.setText("");
+        cbxCategoria.setSelectedIndex(0);
+        cbxCiclos.setSelectedIndex(0);
+        CargarCiclos();
+        CargarMaterias();
+        CargarRoles();
+        cargarCombos();
+    }
+
+    public void GuardarCiclos() throws IOException {
+
+        if (validarCiclo()) {
+            cd.getCiclo().setNombre_ciclo(txtNombreCiclo.getText());
+            cd.getCiclo().setDuracion(Integer.parseInt(txtDuracionCiclo.getText()));
+            cd.guardar();
+            Limpiar();
+
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Por favor, complete todos los campos antes de guardar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+
+        }
+
+    }
+
+    public void guardarRoles() throws IOException {
+        rd.getRol().setNombre_rol(cbxRoles.getSelectedItem().toString());
+        rd.getRol().setDescripccion(txtDescripcion.getText());
+        rd.guardar();
+        Limpiar();
+    }
+
+    public void guardarMaterias() throws IOException, EmptyException, PositionException {
+        if (validarMaterias()) {
+            String nombreCicloSeleccionado = (String) cbxCiclos.getSelectedItem();
+            Ciclo cicloSeleccionado = cd.obtenerCicloPorNombre(nombreCicloSeleccionado);
+
+            if (cicloSeleccionado != null) {
+                cm.guardarMateria(txtNombreMaterias.getText(),
+                        cbxCategoria.getSelectedItem().toString(),
+                        cicloSeleccionado.getId());
+                Limpiar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Ciclo no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Por favor, complete todos los campos antes de guardar.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public Boolean validarCiclo() {
+        return (!txtNombreCiclo.getText().trim().isEmpty()
+                && !txtDuracionCiclo.getText().trim().isEmpty());
+    }
+
+    public Boolean validarMaterias() {
+        return (!txtNombreMaterias.getText().trim().isEmpty()
+                && cbxCategoria.getSelectedItem() != null
+                && !cbxCategoria.getSelectedItem().toString().isEmpty()
+                && cbxCiclos.getSelectedItem() != null
+                && !cbxCiclos.getSelectedItem().toString().isEmpty());
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -371,11 +497,23 @@ public class pnlConfiguracion extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarCicloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCicloActionPerformed
-
+        try {
+            GuardarCiclos();
+        } catch (IOException ex) {
+            Logger.getLogger(pnlConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGuardarCicloActionPerformed
 
     private void btnGuardarMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarMateriasActionPerformed
-
+        try {
+            guardarMaterias();
+        } catch (IOException ex) {
+            Logger.getLogger(pnlConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EmptyException ex) {
+            Logger.getLogger(pnlConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (PositionException ex) {
+            Logger.getLogger(pnlConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGuardarMateriasActionPerformed
 
     private void txtNombreMateriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreMateriasActionPerformed
@@ -383,7 +521,11 @@ public class pnlConfiguracion extends javax.swing.JPanel {
     }//GEN-LAST:event_txtNombreMateriasActionPerformed
 
     private void btnGuardarRolesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarRolesActionPerformed
-
+        try {
+            guardarRoles();
+        } catch (IOException ex) {
+            Logger.getLogger(pnlConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGuardarRolesActionPerformed
 
 

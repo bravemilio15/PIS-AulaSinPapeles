@@ -62,66 +62,6 @@ public class Control {
         return materiaDao.listar();
     }
 
-    public void guardarUsuario(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
-            String cedula, String celular, String estado, String nacimiento, Integer edad, String genero, String correoPer,
-            String correoIns, Rol rol, Paralelo paralelo, Ciclo ciclo, String jornada, String modalidad) {
-
-        Estudiante nuevoEstudiante = new Estudiante();
-        nuevoEstudiante.setPrimer_nombre(primerNombre);
-        nuevoEstudiante.setSegundo_nombre(segundoNombre);
-        nuevoEstudiante.setPrimer_apellido(primerApellido);
-        nuevoEstudiante.setSegundo_apellido(segundoApellido);
-        nuevoEstudiante.setCedula(cedula);
-        nuevoEstudiante.setCelular(celular);
-        nuevoEstudiante.setEstado(estado);
-        nuevoEstudiante.setNacimiento(nacimiento);
-        nuevoEstudiante.setEdad(edad);
-        nuevoEstudiante.setGenero(genero);
-        nuevoEstudiante.setCorreoPer(correoPer);
-        nuevoEstudiante.setCorreoIns(correoIns);
-        nuevoEstudiante.setRol(rol);
-        nuevoEstudiante.setParalelo(paralelo);
-        nuevoEstudiante.setCiclo(ciclo);
-        nuevoEstudiante.setJornada(jornada);
-        nuevoEstudiante.setModalidad(modalidad);
-
-        try {
-            estudianteDao.guardar(nuevoEstudiante);
-        } catch (IOException ex) {
-            System.out.println("Error al guardar estudiante: " + ex.getMessage());
-        }
-    }
-
-    public void guardarEstudiante(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
-            String cedula, String celular, String estado, String nacimiento, Integer edad, String genero, String correoPer,
-            String correoIns, Rol rol, Paralelo paralelo, Ciclo ciclo, String jornada, String modalidad) {
-
-        Estudiante nuevoEstudiante = new Estudiante();
-        nuevoEstudiante.setPrimer_nombre(primerNombre);
-        nuevoEstudiante.setSegundo_nombre(segundoNombre);
-        nuevoEstudiante.setPrimer_apellido(primerApellido);
-        nuevoEstudiante.setSegundo_apellido(segundoApellido);
-        nuevoEstudiante.setCedula(cedula);
-        nuevoEstudiante.setCelular(celular);
-        nuevoEstudiante.setEstado(estado);
-        nuevoEstudiante.setNacimiento(nacimiento);
-        nuevoEstudiante.setEdad(edad);
-        nuevoEstudiante.setGenero(genero);
-        nuevoEstudiante.setCorreoPer(correoPer);
-        nuevoEstudiante.setCorreoIns(correoIns);
-        nuevoEstudiante.setRol(rol);
-        nuevoEstudiante.setParalelo(paralelo);
-        nuevoEstudiante.setCiclo(ciclo);
-        nuevoEstudiante.setJornada(jornada);
-        nuevoEstudiante.setModalidad(modalidad);
-
-        try {
-            estudianteDao.guardar(nuevoEstudiante);
-        } catch (IOException ex) {
-            System.out.println("Error al guardar estudiante: " + ex.getMessage());
-        }
-    }
-
     public ListaEnlazada<Estudiante> buscarPorApellidoBinaria(String apellido) {
         ListaEnlazada<Estudiante> lista = estudianteDao.listar();
         ListaEnlazada<Estudiante> resultado = new ListaEnlazada<>();

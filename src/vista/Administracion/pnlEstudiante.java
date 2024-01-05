@@ -206,8 +206,8 @@ public class pnlEstudiante extends javax.swing.JPanel {
                 && !txtInstitucional.getText().trim().isEmpty()
                 && cbxEstado.getSelectedItem() != null
                 && !cbxEstado.getSelectedItem().toString().isEmpty())
-                //&& Utilidades.validarCedula(txtCedula.getText())
-                //&& Utilidades.verificarCelular(txtCelular.getText())
+                && Utilidades.validarCedula(txtCedula.getText())
+                && Utilidades.verificarCelular(txtCelular.getText())
                 && Utilidades.validarCorreoInstitucional(txtInstitucional.getText())
                 && Utilidades.validarCorreoPersonal(txtPersonal.getText())
                 && Utilidades.validarEdad(txtEdad.getText())
