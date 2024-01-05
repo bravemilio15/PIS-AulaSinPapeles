@@ -7,22 +7,23 @@ package modelo.tabla;
 import controlador.ed.lista.ListaEnlazada;
 import controlador.ed.lista.exception.EmptyException;
 import controlador.ed.lista.exception.PositionException;
+import java.util.stream.DoubleStream;
 import javax.swing.table.AbstractTableModel;
-import modelo.Matricula;
+import modelo.Docente;
 
 /**
  *
  * @author cristian
  */
-public class ModeloTablaMatricula extends AbstractTableModel {
+public class ModeloTablaDocente extends AbstractTableModel {
 
-    ListaEnlazada<Matricula> datos;
+    private ListaEnlazada<Docente> datos;
 
-    public ListaEnlazada<Matricula> getDatos() {
+    public ListaEnlazada<Docente> getDatos() {
         return datos;
     }
 
-    public void setDatos(ListaEnlazada<Matricula> datos) {
+    public void setDatos(ListaEnlazada<Docente> datos) {
         this.datos = datos;
     }
 
@@ -33,23 +34,25 @@ public class ModeloTablaMatricula extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return 5;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         try {
-            Matricula m = datos.get(rowIndex);
+            Docente d = datos.get(rowIndex);
 
             switch (columnIndex) {
                 case 0:
-                    return m.getId();
+                    return d.getId();
                 case 1:
-                    return m.getCarrera();
+                    return d.getPrimer_nombre();
                 case 2:
-                    return m.getNivel_academico();
+                    return d.getPrimer_apellido();
                 case 3:
-                    return m.getEstado();
+                    return d.getCedula();
+                case 4:
+                    return d.getGrado_academico();
             }
         } catch (EmptyException | PositionException ex) {
         }
@@ -61,11 +64,13 @@ public class ModeloTablaMatricula extends AbstractTableModel {
             case 0:
                 return "ID";
             case 1:
-                return "Nombre de Carrera";
+                return "Nombre";
             case 2:
-                return "Nivel Academico";
+                return "Apellido";
             case 3:
-                return "Estado de Matricula";
+                return "Cedula";
+            case 4:
+                return "Grado Academico";
         }
 
         return null;

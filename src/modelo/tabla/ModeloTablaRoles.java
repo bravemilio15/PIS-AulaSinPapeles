@@ -1,67 +1,76 @@
 package modelo.tabla;
 
-import controlador.dao.MateriaDao;
 import controlador.ed.lista.ListaEnlazada;
 import controlador.ed.lista.exception.EmptyException;
 import controlador.ed.lista.exception.PositionException;
 import javax.swing.table.AbstractTableModel;
-import modelo.Materia;
+import modelo.Rol;
 
-public class ModeloTablaMateria extends AbstractTableModel {
+public class ModeloTablaRoles extends AbstractTableModel {
 
-    public ListaEnlazada<Materia> datos;
+    private ListaEnlazada<Rol> datos;
 
-    public ListaEnlazada<Materia> getDatos() {
+    public ListaEnlazada<Rol> getDatos() {
         return datos;
     }
 
-    public void setDatos(ListaEnlazada<Materia> datos) {
+    public void setDatos(ListaEnlazada<Rol> datos) {
         this.datos = datos;
     }
 
     @Override
     public int getRowCount() {
+        if (datos == null) {
+            System.out.println("¡La lista de datos es nula!");
+            return 0;
+        }
         return datos.size();
     }
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return 3;
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        if (datos == null) {
+            System.out.println("¡La lista de datos es nula!");
+            return null;
+        }
+
         try {
-            Materia materia = datos.get(rowIndex);
-            MateriaDao md = new MateriaDao();
+            Rol e = datos.get(rowIndex);
+
             switch (columnIndex) {
                 case 0:
-                    return materia.getId();
+                    return e.getId();
                 case 1:
-                    return materia.getNombre();
+                    return e.getNombre_rol();
                 case 2:
-                    return materia.getCiclo().getNombre_ciclo();
-                case 3:
-                    return materia.getCategoria();
+                    return e.getDescripccion();
+
+ 
             }
         } catch (EmptyException | PositionException ex) {
-
+            System.out.println("Error en tablaRols: " + ex.getMessage());
         }
+
         return null;
     }
 
     @Override
     public String getColumnName(int columnIndex) {
+        // Ajustado al número de atributos en Rol
         switch (columnIndex) {
             case 0:
                 return "ID";
             case 1:
                 return "Nombre";
             case 2:
-                return "Ciclo";
-            case 3:
-                return "Categoria";
+                return "Descripcion";
         }
+
         return null;
     }
 }
