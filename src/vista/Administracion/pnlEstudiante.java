@@ -5,18 +5,242 @@
  */
 package vista.Administracion;
 
+import controlador.ControlarEstudiante;
+import controlador.dao.CicloDAO;
+import controlador.dao.CuentaDao;
+import controlador.dao.EstudianteDao;
+import controlador.dao.ParaleloDAO;
+import controlador.dao.RolDao;
+import controlador.ed.lista.exception.EmptyException;
+import controlador.ed.lista.exception.PositionException;
+import java.awt.Component;
+import java.awt.PopupMenu;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import modelo.Ciclo;
+import modelo.Estudiante;
+import modelo.Paralelo;
+import modelo.Rol;
+import modelo.tabla.ModeloTablaEstudiante;
+import org.jdatepicker.impl.JDatePickerImpl;
+import vista.utilidades.Utilidades;
 
-
-
+/**
+ *
+ * @author cristian
+ */
 public class pnlEstudiante extends javax.swing.JPanel {
 
+    private ModeloTablaEstudiante modelo = new ModeloTablaEstudiante();
+    private ControlarEstudiante control = new ControlarEstudiante();
+    private CicloDAO cd = new CicloDAO();
+    private ParaleloDAO pd = new ParaleloDAO();
+    private CuentaDao cuentad = new CuentaDao();
+    private RolDao rld = new RolDao();
+    private EstudianteDao ed = new EstudianteDao();
+    private int pos = -1;
 
     public pnlEstudiante() {
         initComponents();
+        initDatePickerForNacimiento();
+        cargarTabla();
+        cargarCombos();
+    }
+
+    private void cargarTabla() {
+        modelo.setDatos(control.getEstudiantes());
+        tblUsuarios.setModel(modelo);
+        tblUsuarios.updateUI();
+    }
+
+    private void actualizarTabla() {
+        tblUsuarios.setModel(modelo);
+        tblUsuarios.updateUI();
+    }
+
+    private void cargarCombos() {
+        Utilidades.cargarGenero(cbxGenero);
+        Utilidades.cargarEstado(cbxEstado);
+        Utilidades.cargarCiclos(cbxCiclo);
+        Utilidades.cargarParalelo(cbxParalelo);
+        Utilidades.cargarModalidad(cbxModalidad);
+        Utilidades.cargarRolEstudiante(cbxRol);
+    }
+
+    private void limpiar() {
+        txtNombre.setText("");
+        txtApellido.setText("");
+        txtCedula.setText("");
+        txtCelular.setText("");
+        txtNacimiento.setText("");
+        txtPersonal.setText("");
+        txtEdad.setText("");
+        txtInstitucional.setText("");
+        txtNacimiento.setText("");
+    }
+
+    private void guardar() throws IOException, EmptyException, PositionException {
+        if (validar()) {
+            String cicloSeleccionado = cbxCiclo.getSelectedItem().toString();
+            Ciclo ciclo = cd.obtenerCicloPorNombre(cicloSeleccionado);
+            String modalidadSeleccionada = cbxModalidad.getSelectedItem().toString();
+
+            String paraleloSeleccionado = cbxParalelo.getSelectedItem().toString();
+            Paralelo paralelo = pd.obtenerParaleloPorNombre(paraleloSeleccionado);
+
+            // Dividir nombres y apellidos
+            String[] nombres = txtNombre.getText().split("\\s+");
+            String[] apellidos = txtApellido.getText().split("\\s+");
+
+            // Configurar los valores en el objeto Estudiante
+            control.getEstudiante().setPrimer_nombre(nombres.length > 0 ? nombres[0] : "");
+            control.getEstudiante().setSegundo_nombre(nombres.length > 1 ? nombres[1] : "");
+            control.getEstudiante().setPrimer_apellido(apellidos.length > 0 ? apellidos[0] : "");
+            control.getEstudiante().setSegundo_apellido(apellidos.length > 1 ? apellidos[1] : "");
+
+            control.getEstudiante().setCedula(txtCedula.getText());
+            control.getEstudiante().setCelular(txtCelular.getText());
+            control.getEstudiante().setNacimiento(txtNacimiento.getText());
+            control.getEstudiante().setGenero((String) cbxGenero.getSelectedItem());
+
+            Integer edad = Utilidades.calcularEdad(txtNacimiento.getText());
+            control.getEstudiante().setEdad(edad);
+
+            control.getEstudiante().setCorreoIns(txtInstitucional.getText());
+            control.getEstudiante().setCorreoPer(txtPersonal.getText());
+            control.getEstudiante().setCiclo(ciclo);
+            control.getEstudiante().setParalelo(paralelo);
+            control.getEstudiante().setModalidad(modalidadSeleccionada);
+
+            String rolSeleccionado = cbxRol.getSelectedItem().toString();
+            Rol rol = rld.obtenerRolPorNombre(rolSeleccionado);
+            control.getEstudiante().setRol(rol);
+
+            if (control.registrar() == true) {
+                Integer id_Estudiante = ed.obtenerId_EstudiantePorCorreoCedula(txtInstitucional.getText(),
+                        txtCedula.getText());
+
+                cuentad.getCuenta().setNombre_usuario(txtInstitucional.getText());
+                cuentad.getCuenta().setContra(txtCedula.getText());
+                cuentad.getCuenta().setId_estudiante(id_Estudiante);
+
+                cuentad.guardar();
+            }
+
+            actualizarTabla();
+            limpiar();
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos antes de guardar.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void modificarUsuario() {
+        int fila = tblUsuarios.getSelectedRow();
+
+        if (fila < 0) {
+            JOptionPane.showMessageDialog(null, "Seleccione una fila", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Estudiante usuarioAModificar = modelo.getDatos().get(fila);
+
+                control.getEstudiante().setId(usuarioAModificar.getId());
+
+                // Dividir nombres y apellidos
+                String[] nombres = txtNombre.getText().split("\\s+");
+                String[] apellidos = txtApellido.getText().split("\\s+");
+
+                // Configurar los valores en el objeto Estudiante
+                control.getEstudiante().setPrimer_nombre(nombres.length > 0 ? nombres[0] : "");
+                control.getEstudiante().setSegundo_nombre(nombres.length > 1 ? nombres[1] : "");
+                control.getEstudiante().setPrimer_apellido(apellidos.length > 0 ? apellidos[0] : "");
+                control.getEstudiante().setSegundo_apellido(apellidos.length > 1 ? apellidos[1] : "");
+
+                control.getEstudiante().setCedula(txtCedula.getText());
+                control.getEstudiante().setCelular(txtCelular.getText());
+
+                String fechaNacimiento = txtNacimiento.getText();
+                if (!fechaNacimiento.isEmpty()) {
+                    control.getEstudiante().setNacimiento(fechaNacimiento);
+
+                    control.getEstudiante().setGenero((String) cbxGenero.getSelectedItem());
+                    Integer edad = Utilidades.calcularEdad(txtNacimiento.getText());
+                    control.getEstudiante().setEdad(edad);
+                    control.getEstudiante().setCorreoIns(txtInstitucional.getText());
+                    control.getEstudiante().setCorreoPer(txtPersonal.getText());
+                    control.getEstudiante().setCiclo(usuarioAModificar.getCiclo());
+                    control.getEstudiante().setParalelo(usuarioAModificar.getParalelo());
+                    control.getEstudiante().setModalidad(cbxModalidad.getSelectedItem().toString());
+
+                    control.getEstudianteDao().modificar(pos);
+                    actualizarTabla();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Ingrese una fecha de nacimiento válida", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private Boolean validar() {
+        return (!txtNombre.getText().trim().isEmpty()
+                && !txtApellido.getText().trim().isEmpty()
+                && !txtCedula.getText().trim().isEmpty()
+                && !txtCelular.getText().trim().isEmpty()
+                && !txtNacimiento.getText().trim().isEmpty()
+                && !txtPersonal.getText().trim().isEmpty()
+                && !txtInstitucional.getText().trim().isEmpty()
+                && cbxEstado.getSelectedItem() != null
+                && !cbxEstado.getSelectedItem().toString().isEmpty())
+                //&& Utilidades.validarCedula(txtCedula.getText())
+                //&& Utilidades.verificarCelular(txtCelular.getText())
+                && Utilidades.validarCorreoInstitucional(txtInstitucional.getText())
+                && Utilidades.validarCorreoPersonal(txtPersonal.getText())
+                && Utilidades.validarEdad(txtEdad.getText())
+                && Utilidades.validarNombresApellidos(txtNombre.getText(), txtApellido.getText());
 
     }
 
+    private void initDatePickerForNacimiento() {
+        JDatePickerImpl datePicker = Utilidades.createDatePicker();
 
+        datePicker.addActionListener(e -> {
+            Date selectedDate = (Date) datePicker.getModel().getValue();
+            txtNacimiento.setText(Utilidades.formatDateString(selectedDate, "yyyy-MM-dd"));
+            actualizarEdad();
+        });
+
+        txtNacimiento.setEditable(false);
+        txtEdad.setEditable(false);
+
+        txtNacimiento.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    Utilidades.showDatePickerPopup(txtNacimiento, datePicker);
+                }
+            }
+        });
+    }
+
+    private void actualizarEdad() {
+        Integer edad = Utilidades.calcularEdad(txtNacimiento.getText());
+        txtEdad.setText(edad.toString());
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -333,11 +557,21 @@ public class pnlEstudiante extends javax.swing.JPanel {
     }//GEN-LAST:event_txtNombreActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-
+        try {
+            try {
+                guardar();
+            } catch (EmptyException ex) {
+                Logger.getLogger(pnlEstudiante.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (PositionException ex) {
+                Logger.getLogger(pnlEstudiante.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(pnlEstudiante.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-       
+        modificarUsuario();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void cbxParaleloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxParaleloActionPerformed
