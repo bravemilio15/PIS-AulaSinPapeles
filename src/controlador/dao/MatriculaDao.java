@@ -13,8 +13,41 @@ import modelo.Matricula;
  *
  * @author cristian
  */
-public class MatriculaDao  {
+public class MatriculaDao extends AdaptadorDAO<Matricula> {
 
-  
+    private Matricula matricula;
+    private Matricula matriculaActual;
+
+    public MatriculaDao() {
+        super(Matricula.class);
+    }
+
+    public Matricula getMatricula() {
+        if (this.matricula == null) {
+            this.matricula = new Matricula();
+        }
+        return matricula;
+    }
+
+    public void setMatricula(Matricula matricula) {
+        this.matricula = matricula;
+    }
+
+    public void guardar() throws IOException {
+        matricula.setId(generateID());
+        this.guardar(matricula);
+    }
+
+    public void modificar(Integer pos) throws EmptyException, PositionException, IOException {
+        this.modificar(matricula, pos);
+    }
+
+    public void setMatriculaActual(Matricula matriculaActual) {
+        this.matriculaActual = matriculaActual;
+    }
+
+    private Integer generateID() {
+        return listar().size() + 1;
+    }
 
 }
