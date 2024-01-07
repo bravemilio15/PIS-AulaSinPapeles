@@ -17,20 +17,20 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Ciclo;
+import modelo.Estudiante;
 import modelo.tabla.ModeloTablaCiclo;
 import modelo.tabla.ModeloTablaMateria;
 import modelo.tabla.ModeloTablaRoles;
 import vista.utilidades.Utilidades;
 
-/**
- *
- * @author cristian
- */
+
+
 public class pnlConfiguracion extends javax.swing.JPanel {
 
     CicloDAO cd = new CicloDAO();
     ControlMateria cm = new ControlMateria();
     RolDao rd = new RolDao();
+    Estudiante e = new Estudiante();
     ModeloTablaRoles modeloR = new ModeloTablaRoles();
     ModeloTablaCiclo modeloC = new ModeloTablaCiclo();
     ModeloTablaMateria modeloM = new ModeloTablaMateria();
