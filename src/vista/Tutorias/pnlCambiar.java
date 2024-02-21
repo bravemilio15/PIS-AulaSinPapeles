@@ -13,10 +13,13 @@ import vista.Administracion.*;
  */
 public class pnlCambiar extends javax.swing.JPanel {
 
+    /**
+     * Creates new form pnlHome
+     */
     public pnlCambiar() {
         initComponents();
     }
-    //hecho por justin
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

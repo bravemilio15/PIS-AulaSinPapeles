@@ -1,20 +1,19 @@
 package modelo.tabla;
 
-import controlador.ed.lista.ListaEnlazada;
-import controlador.ed.lista.exception.EmptyException;
-import controlador.ed.lista.exception.PositionException;
+
+import controlador.ed.listas.LinkedList;
 import javax.swing.table.AbstractTableModel;
 import modelo.Rol;
 
 public class ModeloTablaRoles extends AbstractTableModel {
 
-    private ListaEnlazada<Rol> datos;
+    private LinkedList<Rol> datos;
 
-    public ListaEnlazada<Rol> getDatos() {
+    public LinkedList<Rol> getDatos() {
         return datos;
     }
 
-    public void setDatos(ListaEnlazada<Rol> datos) {
+    public void setDatos(LinkedList<Rol> datos) {
         this.datos = datos;
     }
 
@@ -24,12 +23,12 @@ public class ModeloTablaRoles extends AbstractTableModel {
             System.out.println("¡La lista de datos es nula!");
             return 0;
         }
-        return datos.size();
+        return datos.getSize();
     }
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 2;
     }
 
     @Override
@@ -44,15 +43,13 @@ public class ModeloTablaRoles extends AbstractTableModel {
 
             switch (columnIndex) {
                 case 0:
-                    return e.getId();
+                    return e.getNombre();
                 case 1:
-                    return e.getNombre_rol();
-                case 2:
-                    return e.getDescripccion();
+                    return e.getDescripcion();
 
  
             }
-        } catch (EmptyException | PositionException ex) {
+        } catch (Exception ex) {
             System.out.println("Error en tablaRols: " + ex.getMessage());
         }
 
@@ -61,13 +58,11 @@ public class ModeloTablaRoles extends AbstractTableModel {
 
     @Override
     public String getColumnName(int columnIndex) {
-        // Ajustado al número de atributos en Rol
+
         switch (columnIndex) {
             case 0:
-                return "ID";
-            case 1:
                 return "Nombre";
-            case 2:
+            case 1:
                 return "Descripcion";
         }
 

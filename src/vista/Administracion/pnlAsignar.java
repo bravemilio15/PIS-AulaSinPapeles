@@ -5,29 +5,13 @@
  */
 package vista.Administracion;
 
-import controlador.ControlarDocente;
-import controlador.ControlarDocente;
-import controlador.ControlarMatricula;
-import controlador.dao.MateriaDao;
-import controlador.dao.MatriculaDao;
-import controlador.ed.lista.ListaEnlazada;
-import controlador.ed.lista.exception.EmptyException;
-import controlador.ed.lista.exception.PositionException;
+import contdocenteador.aula.DocenteDAO;
+import controlador.aula.MateriaDAO;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import modelo.Ciclo;
 import modelo.Docente;
-import modelo.Materia;
-import modelo.Matricula;
 import modelo.tabla.ModeloTablaDocente;
-import modelo.tabla.ModeloTablaDocente;
-import modelo.tabla.ModeloTablaMatricula;
 import vista.utilidades.Utilidades;
-import static vista.utilidades.Utilidades.cargarCursosPorCicloEItinerario;
 
 /**
  *
@@ -35,29 +19,19 @@ import static vista.utilidades.Utilidades.cargarCursosPorCicloEItinerario;
  */
 public class pnlAsignar extends javax.swing.JPanel {
 
-    private ControlarDocente controlDocente = new ControlarDocente();
+    private DocenteDAO dd = new DocenteDAO();
     private ModeloTablaDocente modeloDocente = new ModeloTablaDocente();
-    private MateriaDao materiad = new MateriaDao();
+    private MateriaDAO materiad = new MateriaDAO();
     private Integer pos = -1;
 
-    /**
-     * Creates new form pnlHome
-     */
     public pnlAsignar() {
         initComponents();
-        cargarCombos();
-        cargarTablaDocente();
+        limpiar();
 
     }
 
     private void cargarTablaDocente() {
-        modeloDocente.setDatos(controlDocente.listar());
-        tblDocentes.setModel(modeloDocente);
-        tblDocentes.updateUI();
-        actualizarTablaDocentes();
-    }
-
-    private void actualizarTablaDocentes() {
+        modeloDocente.setDatos(dd.listar());
         tblDocentes.setModel(modeloDocente);
         tblDocentes.updateUI();
     }
@@ -91,103 +65,8 @@ public class pnlAsignar extends javax.swing.JPanel {
     }
 
     private void limpiar() {
-
-    }
-
-    private void mostrarDocente() throws EmptyException, PositionException {
-        int pos = tblDocentes.getSelectedRow();
-
-        if (pos >= controlDocente.getDocentes().size()) {
-            throw new EmptyException("El estudiante no existe");
-        }
-
-        if (pos >= 0) {
-            Docente estudianteSeleccionado = modeloDocente.getDatos().get(pos);
-            controlDocente.setDocente(estudianteSeleccionado);
-            limpiar();
-
-        } else {
-            throw new PositionException("Seleccione una fila (estudiante)");
-        }
-    }
-
-    public void buscarBinaria() {
-
-        switch (cbxCriterio.getSelectedItem().toString()) {
-            case "Nombre":
-                modeloDocente.setDatos(controlDocente.buscarPorNombreBinaria(txtBuscar.getText()));
-                limpiar();
-                actualizarTablaDocentes();
-                break;
-            case "Cedula":
-                modeloDocente.setDatos(controlDocente.buscarPorCedulaBinaria(txtBuscar.getText()));
-                limpiar();
-                actualizarTablaDocentes();
-                break;
-        }
-    }
-
-    private void guardar() {
-        int pos = tblDocentes.getSelectedRow();
-
-        try {
-            if (pos >= 0 && pos < controlDocente.getDocentes().size()) {
-                Docente docenteSeleccionado = obtenerDocenteSeleccionado(pos);
-
-                if (docenteSeleccionado != null) {
-                    Materia materiaSeleccionada = obtenerMateriaSeleccionada();
-
-                    if (materiaSeleccionada != null) {
-                        if (docenteSeleccionado.getMaterias() == null) {
-                            docenteSeleccionado.setMaterias(new ListaEnlazada<>());
-                        }
-
-                        docenteSeleccionado.getMaterias().insertar(materiaSeleccionada);
-
-                        // Imprime la lista de materias del docente después de la inserción
-                        System.out.println("Materias del Docente después de la inserción: " + docenteSeleccionado.getMaterias());
-
-                        cargarTablaDocente();
-                        limpiar();
-                    } else {
-                        System.out.println("Materia no encontrada.");
-                    }
-                } else {
-                    System.out.println("Docente no encontrado.");
-                }
-
-            } else {
-                System.out.println("Posición no válida: " + pos);
-            }
-        } catch (EmptyException | PositionException ex) {
-            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
-    }
-
-    private Materia obtenerMateriaSeleccionada() throws EmptyException, PositionException {
-        String nombreMateriaSeleccionada = cbxMateria.getSelectedItem().toString();
-        return buscarMateriaPorNombre(nombreMateriaSeleccionada);
-    }
-
-    private Materia buscarMateriaPorNombre(String nombre) throws EmptyException, PositionException {
-        ListaEnlazada<Materia> materias = materiad.listar();
-        for (int i = 0; i < materias.size(); i++) {
-            Materia materia = materias.get(i);
-            if (materia.getNombre().equals(nombre)) {
-                return materia;
-            }
-        }
-        throw new EmptyException("La materia seleccionada no existe");
-    }
-
-    private Docente obtenerDocenteSeleccionado(int pos) throws EmptyException, PositionException {
-        ListaEnlazada<Docente> docentes = controlDocente.getDocentes();
-        if (pos >= 0 && pos < docentes.size()) {
-            return docentes.get(pos);
-        } else {
-            return null;
-        }
+        cargarCombos();
+        cargarTablaDocente();
     }
 
     /**
@@ -408,25 +287,16 @@ public class pnlAsignar extends javax.swing.JPanel {
     }//GEN-LAST:event_txtBuscarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        buscarBinaria();
-        limpiar();
+
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMatriculaActionPerformed
 
-        try {
-            mostrarDocente();
-
-        } catch (EmptyException ex) {
-            Logger.getLogger(pnlAsignar.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PositionException ex) {
-            Logger.getLogger(pnlAsignar.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
     }//GEN-LAST:event_btnMatriculaActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        guardar();
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
 

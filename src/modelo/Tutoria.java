@@ -4,46 +4,49 @@
  */
 package modelo;
 
-import java.util.Date;
-
 /**
  *
  * @author Bravo
  */
+import java.util.Date;
+
 public class Tutoria {
 
-    private Integer id;
-    private String fecha;
+    private Integer tutoria_Id;
+    private Date fecha;
     private String temaGeneral;
-    private Boolean estado;
-    private Boolean asistencia;
-    private Paralelo paralelo;
-    private String Descripcion;
+    private Integer estado;
+    private String comentario;
+    private Integer materia_Id;
+    
 
     public Tutoria() {
     }
+    
+    
 
-    public String getDescripcion() {
-        return Descripcion;
+    public Integer getMateria_Id() {
+        return materia_Id;
     }
 
-    public void setDescripcion(String Descripcion) {
-        this.Descripcion = Descripcion;
+    public void setMateria_Id(Integer materia_Id) {
+        this.materia_Id = materia_Id;
+    }
+    
+
+    public Integer getTutoria_Id() {
+        return tutoria_Id;
     }
 
-    public Integer getId() {
-        return id;
+    public void setTutoria_Id(Integer tutoria_Id) {
+        this.tutoria_Id = tutoria_Id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
@@ -55,28 +58,21 @@ public class Tutoria {
         this.temaGeneral = temaGeneral;
     }
 
-    public Boolean getEstado() {
+    public Integer getEstado() {
         return estado;
     }
 
-    public void setEstado(Boolean estado) {
+    public void setEstado(Integer estado) {
         this.estado = estado;
     }
 
-    public Boolean getAsistencia() {
-        return asistencia;
+    public String getComentario() {
+        return comentario;
     }
 
-    public void setAsistencia(Boolean asistencia) {
-        this.asistencia = asistencia;
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 
-    public Paralelo getParalelo() {
-        return paralelo;
-    }
-
-    public void setParalelo(Paralelo paralelo) {
-        this.paralelo = paralelo;
-    }
 
 }

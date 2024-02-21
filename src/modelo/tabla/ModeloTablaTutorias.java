@@ -1,20 +1,19 @@
 package modelo.tabla;
 
-import controlador.ed.lista.ListaEnlazada;
-import controlador.ed.lista.exception.EmptyException;
-import controlador.ed.lista.exception.PositionException;
+
+import controlador.ed.listas.LinkedList;
 import javax.swing.table.AbstractTableModel;
 import modelo.Tutoria;
 
 public class ModeloTablaTutorias extends AbstractTableModel {
 
-    private ListaEnlazada<Tutoria> datos;
+    private LinkedList<Tutoria> datos;
 
-    public ListaEnlazada<Tutoria> getDatos() {
+    public LinkedList<Tutoria> getDatos() {
         return datos;
     }
 
-    public void setDatos(ListaEnlazada<Tutoria> datos) {
+    public void setDatos(LinkedList<Tutoria> datos) {
         this.datos = datos;
     }
 
@@ -24,7 +23,7 @@ public class ModeloTablaTutorias extends AbstractTableModel {
             System.out.println("¡La lista de datos es nula!");
             return 0;
         }
-        return datos.size();
+        return datos.getSize();
     }
 
     @Override
@@ -44,16 +43,14 @@ public class ModeloTablaTutorias extends AbstractTableModel {
 
             switch (columnIndex) {
                 case 0:
-                    return e.getId();
+                    return e.getTemaGeneral();
                 case 1:
-                    return e.getEstado();
+                    return e.getFecha();
                 case 2:
-                    return e.getParalelo().getNombre_paralelo();
-                case 3:
-                    return e.getDescripcion();
+                    return e.getEstado();
 
             }
-        } catch (EmptyException | PositionException ex) {
+        } catch (Exception ex) {
             System.out.println("Error en tablaTutorias: " + ex.getMessage());
         }
 
@@ -64,14 +61,13 @@ public class ModeloTablaTutorias extends AbstractTableModel {
     public String getColumnName(int columnIndex) {
         // Ajustado al número de atributos en Tutoria
         switch (columnIndex) {
+
             case 0:
-                return "ID";
-            case 1:
-                return "Estado";
-            case 2:
-                return "Paralelo";
-            case 3:
                 return "Tema General";
+            case 1:
+                return "Fecha";
+            case 2:
+                return "Estado";
         }
 
         return null;

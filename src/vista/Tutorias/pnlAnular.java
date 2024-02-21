@@ -13,7 +13,9 @@ import vista.Administracion.*;
  */
 public class pnlAnular extends javax.swing.JPanel {
 
-   
+    /**
+     * Creates new form pnlHome
+     */
     public pnlAnular() {
         initComponents();
     }

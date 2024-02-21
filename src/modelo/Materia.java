@@ -4,55 +4,77 @@
  */
 package modelo;
 
+/**
+ *
+ * @author Bravo
+ */
 public class Materia {
 
-    private Integer id;
+    private Integer materia_Id;
+    private Integer estado;
     private String nombre;
-    private String Categoria; // Es para ver si es Itinerario Materia Basica y asi para no crear MateriaI
-    private Ciclo ciclo;
+    private String codigo;
+    private String categoria;
+    private Integer ciclo_Id;
+    private Integer docente_Id;
 
     public Materia() {
     }
 
-    public Materia(String nombre) {
-        this.nombre = nombre;
+    public Integer getMateria_Id() {
+        return materia_Id;
+    }
+
+    public void setMateria_Id(Integer materia_Id) {
+        this.materia_Id = materia_Id;
+    }
+
+    public Integer getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Integer estado) {
+        this.estado = estado;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public Ciclo getCiclo() {
-        return ciclo;
-    }
-
-    public void setCiclo(Ciclo ciclo) {
-        this.ciclo = ciclo;
-    }
-
-    public String getCategoria() {
-        return Categoria;
-    }
-
-    public void setCategoria(String Categoria) {
-        this.Categoria = Categoria;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    @Override
-    public String toString() {
-        return "Materia:" + nombre;
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public Integer getCiclo_Id() {
+        return ciclo_Id;
+    }
+
+    public void setCiclo_Id(Integer ciclo_Id) {
+        this.ciclo_Id = ciclo_Id;
+    }
+
+    public Integer getDocente_Id() {
+        return docente_Id;
+    }
+
+    public void setDocente_Id(Integer docente_Id) {
+        this.docente_Id = docente_Id;
     }
 
 }

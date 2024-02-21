@@ -1,53 +1,53 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package modelo;
 
+/**
+ *
+ * @author Bravo
+ */
 public class Cuenta {
 
-    private Integer id;
-    private String contra;
-    private String nombre_usuario;
-    private Integer id_estudiante;
-    private Integer id_docente;
+    private Integer cuenta_Id;
+    private String clave;
+    private String nombre;
+    private Integer usuario_Id;
 
-    public Integer getId_docente() {
-        return id_docente;
+    public Cuenta() {
     }
 
-    public void setId_docente(Integer id_docente) {
-        this.id_docente = id_docente;
-    }
-    
-    
-
-    public Integer getId_estudiante() {
-        return id_estudiante;
+    public Integer getCuenta_Id() {
+        return cuenta_Id;
     }
 
-    public void setId_estudiante(Integer id_estudiante) {
-        this.id_estudiante = id_estudiante;
+    public void setCuenta_Id(Integer cuenta_Id) {
+        this.cuenta_Id = cuenta_Id;
     }
 
-    public Integer getId() {
-        return id;
+    public String getClave() {
+        return clave;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setClave(String clave) {
+        this.clave = clave;
     }
 
-    public String getContra() {
-        return contra;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setContra(String contra) {
-        this.contra = contra;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getNombre_usuario() {
-        return nombre_usuario;
+    public Integer getUsuario_Id() {
+        return usuario_Id;
     }
 
-    public void setNombre_usuario(String nombre_usuario) {
-        this.nombre_usuario = nombre_usuario;
+    public void setUsuario_Id(Integer usuario_Id) {
+        this.usuario_Id = usuario_Id;
     }
 
 }

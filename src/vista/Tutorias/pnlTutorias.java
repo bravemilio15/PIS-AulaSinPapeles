@@ -5,23 +5,9 @@
  */
 package vista.Tutorias;
 
-import vista.Administracion.*;
-import controlador.ControlarMatricula;
-import controlador.dao.CicloDAO;
-import controlador.dao.CuentaDao;
-import controlador.dao.EstudianteDao;
-import controlador.dao.ParaleloDAO;
-import controlador.dao.RolDao;
-import controlador.dao.TutoriaDao;
-import java.io.IOException;
-import java.net.URISyntaxException;
+import controlador.aula.TutoriaDAO;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import modelo.Matricula;
-import modelo.tabla.ModeloTablaEstudiante;
-import modelo.tabla.ModeloTablaMatricula;
 import modelo.tabla.ModeloTablaTutorias;
-import vista.utilidades.Utilidades;
 
 /**
  *
@@ -29,14 +15,9 @@ import vista.utilidades.Utilidades;
  */
 public class pnlTutorias extends javax.swing.JPanel {
 
-    private CicloDAO cd = new CicloDAO();
-    private ParaleloDAO pd = new ParaleloDAO();
-    private CuentaDao cuentad = new CuentaDao();
-    private RolDao rld = new RolDao();
-    private EstudianteDao ed = new EstudianteDao();
-    private TutoriaDao td = new TutoriaDao();
-    private ModeloTablaTutorias modelo = new ModeloTablaTutorias();
     private int pos = -1;
+    private ModeloTablaTutorias modelo = new ModeloTablaTutorias();
+    private TutoriaDAO td = new TutoriaDAO();
 
     /**
      * Creates new form pnlHome
@@ -46,13 +27,12 @@ public class pnlTutorias extends javax.swing.JPanel {
         cargarTutorias();
 
     }
-
-    public void cargarTutorias() {
+    
+     public void cargarTutorias() {
         modelo.setDatos(td.listar());
         tblTutorias.setModel(modelo);
         tblTutorias.updateUI();
     }
-    
     
 
     /**
@@ -131,7 +111,7 @@ public class pnlTutorias extends javax.swing.JPanel {
     private void btnCrearTutoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearTutoriaActionPerformed
         pnlTuto crearTutorias = new pnlTuto();
         JFrame frame = new JFrame("Crear Tutoría");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Cierra solo la ventana actual al hacer clic en cerrar
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
         frame.getContentPane().add(crearTutorias);
         frame.pack();
         frame.setLocationRelativeTo(null); // Centra el frame en la pantalla

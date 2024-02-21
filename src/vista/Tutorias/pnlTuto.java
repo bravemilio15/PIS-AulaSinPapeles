@@ -5,73 +5,44 @@
  */
 package vista.Tutorias;
 
-import controlador.ControlarEstudiante;
-import controlador.ControlarMatricula;
-import controlador.dao.CicloDAO;
-import controlador.dao.CuentaDao;
-import controlador.dao.EstudianteDao;
-import controlador.dao.ParaleloDAO;
-import controlador.dao.RolDao;
-import controlador.dao.TutoriaDao;
-import controlador.ed.lista.exception.EmptyException;
-import controlador.ed.lista.exception.PositionException;
-import java.awt.Component;
-import java.awt.PopupMenu;
+import controlador.aula.CicloDAO;
+import controlador.aula.CuentaDAO;
+import controlador.aula.EstudianteDAO;
+import controlador.aula.ParaleloDAO;
+import controlador.aula.RolDAO;
+import controlador.aula.TutoriaDAO;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import modelo.Ciclo;
-import modelo.Paralelo;
-import modelo.tabla.ModeloTablaEstudiante;
-import modelo.tabla.ModeloTablaMatricula;
 import modelo.tabla.ModeloTablaTutorias;
-import org.jdatepicker.JDatePicker;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-import vista.utilidades.DateLabelFormatter;
 import vista.utilidades.Utilidades;
 
-/**
- *
- * @author cristian
- */
 public class pnlTuto extends javax.swing.JPanel {
 
+    private int pos = -1;
+    
     private CicloDAO cd = new CicloDAO();
     private ParaleloDAO pd = new ParaleloDAO();
-    private CuentaDao cuentad = new CuentaDao();
-    private RolDao rld = new RolDao();
-    private EstudianteDao ed = new EstudianteDao();
-    private TutoriaDao td = new TutoriaDao();
+    private CuentaDAO cuentad = new CuentaDAO();
+    private RolDAO rld = new RolDAO();
+    private EstudianteDAO ed = new EstudianteDAO();
+    private TutoriaDAO td = new TutoriaDAO();
     private ModeloTablaTutorias modelo = new ModeloTablaTutorias();
-    private int pos = -1;
 
     /**
      * Creates new form pnlHome
      */
     public pnlTuto() {
         initComponents();
-        initDatePickerForFecha();
         cargarCombos();
 
     }
-
+    
     public void cargarCombos() {
         Utilidades.cargarMaterias(cbxCiclo.getSelectedItem().toString(), cbxMaterias);
         Utilidades.cargarParalelo(cbxParalelo);
         Utilidades.cargarCiclos(cbxCiclo);
         cbxCiclo.addItemListener(new ItemListener() {
+            
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -82,44 +53,6 @@ public class pnlTuto extends javax.swing.JPanel {
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
-                }
-            }
-        });
-    }
-
-    public void guardarTutoria() throws EmptyException, PositionException, IOException {
-
-        String paraleloSeleccionado = cbxParalelo.getSelectedItem().toString();
-        Paralelo paralelo = pd.obtenerParaleloPorNombre(paraleloSeleccionado);
-
-        td.getTutoria().setTemaGeneral(txtTemaGeneral.getText());
-        td.getTutoria().setDescripcion(txtDescripcion.getText());
-        td.getTutoria().setAsistencia(true);
-        td.getTutoria().setEstado(true);
-        td.getTutoria().setFecha(txtFecha.getText());
-        td.getTutoria().setParalelo(paralelo);
-
-        td.guardar();
-        updateUI();
-
-    }
-
-    private void initDatePickerForFecha() {
-        JDatePickerImpl datePicker = Utilidades.createDatePicker();
-
-        datePicker.addActionListener(e -> {
-            Date selectedDate = (Date) datePicker.getModel().getValue();
-            txtFecha.setText(Utilidades.formatDateString(selectedDate, "yyyy-MM-dd"));
-            // También puedes llamar a actualizarEdad() aquí si es necesario
-        });
-
-        txtFecha.setEditable(false);
-
-        txtFecha.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e)) {
-                    Utilidades.showDatePickerPopup(txtFecha, datePicker);
                 }
             }
         });
@@ -186,7 +119,7 @@ public class pnlTuto extends javax.swing.JPanel {
         jLabel6.setForeground(new java.awt.Color(0, 153, 255));
         jLabel6.setText("FECHA");
 
-        cbxMaterias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbxMaterias.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Base de Datos", "Estructura de Datos" }));
 
         cbxParalelo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -280,17 +213,7 @@ public class pnlTuto extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            guardarTutoria();
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            frame.dispose();
-        } catch (EmptyException ex) {
-            Logger.getLogger(pnlTuto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PositionException ex) {
-            Logger.getLogger(pnlTuto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(pnlTuto.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
 
